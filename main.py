@@ -1,32 +1,22 @@
 import pygame
 import time
+from coordinate import Coordinate
 from fruit import Fruit
 from player import Player, Direction
 
 pygame.init()
 
-SCREEN_WIDTH = 640
-SCREEN_HEIGHT = 640
-GRID_WIDTH = 32
-GRID_HEIGHT = 32
-SQUARE_WIDTH = int(SCREEN_WIDTH / GRID_WIDTH)
-SQUARE_HEIGHT = int(SCREEN_HEIGHT / GRID_HEIGHT)
+SCREEN_DIMENSIONS = Coordinate(640, 640)
+GRID_DIMENSIONS = Coordinate(32, 32)
+SQUARE_DIMENSIONS = SCREEN_DIMENSIONS // GRID_DIMENSIONS
 SCREEN_BACKGROUND_COLOR = (0, 0, 0)
 SECONDS_PER_MOVE = 0.1
 PLAYER_BODY_SEGMENTS = 4
 
 pygame.display.set_caption("Snake")
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-player = Player(GRID_WIDTH,
-                GRID_HEIGHT,
-                SQUARE_WIDTH,
-                SQUARE_HEIGHT,
-                (3, 0),
-                PLAYER_BODY_SEGMENTS)
-fruit = Fruit(GRID_WIDTH,
-              GRID_HEIGHT,
-              SQUARE_WIDTH,
-              SQUARE_HEIGHT)
+screen = pygame.display.set_mode(tuple(SCREEN_DIMENSIONS))
+player = Player(GRID_DIMENSIONS, SQUARE_DIMENSIONS, Coordinate(3, 0), PLAYER_BODY_SEGMENTS)
+fruit = Fruit(GRID_DIMENSIONS, SQUARE_DIMENSIONS)
 fruit.randomize_position(player)
 
 last_move_time = time.time()
@@ -43,7 +33,7 @@ while run_game:
         player.move_forward()
         if player.is_colliding():
             run_game = False
-        if player.body[0].grid_position == fruit.grid_position:
+        if player.body[0].position == fruit.position:
             player.add_segment()
             fruit.randomize_position(player)
     else:
