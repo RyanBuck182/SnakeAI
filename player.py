@@ -100,7 +100,7 @@ class Player:
 
     def add_segment(self):
         self.body.append(Segment(self.square_dimensions,
-                                 self.body[-1].previous_position,
+                                 self.body[-1].position,
                                  self.body[-1].previous_position))
 
 
