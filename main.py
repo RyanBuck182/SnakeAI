@@ -19,8 +19,7 @@ if __name__ == '__main__':
 
     controller = PygameGameController()
 
-    SECONDS_PER_MOVE = 0.15
-    game = Game(handler, renderer, controller, SECONDS_PER_MOVE)
+    game = Game(handler, renderer, controller)
     game.run()
 
     pygame.quit()
