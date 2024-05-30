@@ -3,9 +3,10 @@ from typing import Callable
 import pygame
 import pygame.freetype
 from coordinate import Coordinate
+from menu import Menu
 
 
-class PygameMenu:
+class PygameMenu(Menu):
     MAX_TEXT_SIZE = 70
     SELECTION_COLOR = (0, 255, 0)
     TEXT_COLOR = (255, 255, 255)
@@ -15,31 +16,11 @@ class PygameMenu:
     LEFT_MARGIN = 0.15
 
     def __init__(self, screen: pygame.Surface | pygame.SurfaceType):
+        super().__init__()
         pygame.init()
         self.screen = screen
         self.screen_dimensions = Coordinate(*screen.get_size())
-        self.option_names = []
-        self.option_funcs = []
-        self.selection = 0
         self.font_path = pygame.freetype.get_default_font()
-
-    def add_option(self, name: str, func: Callable):
-        self.option_names.append(name)
-        self.option_funcs.append(func)
-
-    def select_current(self):
-        self.select_option(self.selection)
-
-    def select_option(self, selection: int):
-        if len(self.option_funcs) < selection + 1:
-            raise "ERROR: Cannot select option that does not exist"
-        self.option_funcs[selection]()
-
-    def selection_up(self):
-        self.selection = max(self.selection - 1, 0)
-
-    def selection_down(self):
-        self.selection = min(self.selection + 1, len(self.option_funcs) - 1)
 
     def draw_text(self, text: str, start_pos: Coordinate, max_dimensions: Coordinate):
         font = pygame.freetype.SysFont(self.font_path, 1)
