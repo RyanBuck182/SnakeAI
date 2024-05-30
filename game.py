@@ -9,8 +9,10 @@ class Game:
         self.handler = game_handler
         self.controller = game_controller
 
-    def run(self):
+    def run(self) -> int:
         while not self.handler.game_over:
             self.controller.read_input()
             self.controller.calculate_input(self.handler)
             self.handler.update_game(self.controller.get_input())
+
+        return self.handler.score

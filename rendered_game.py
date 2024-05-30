@@ -17,7 +17,7 @@ class RenderedGame(Game):
         self.renderer = game_renderer
         self.seconds_per_update = seconds_per_update
 
-    def run(self):
+    def run(self) -> int:
         last_move_time = time.time()
         while not self.handler.game_over:
             self.controller.read_input()
@@ -29,3 +29,5 @@ class RenderedGame(Game):
                 self.handler.update_game(self.controller.get_input())
 
             self.renderer.draw_game(self.handler, (progress_to_next_update if progress_to_next_update < 1 else 0))
+
+        return self.handler.score

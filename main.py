@@ -49,7 +49,8 @@ def play_manual():
     controller = PygameGameController()
 
     game = RenderedGame(handler, controller, renderer)
-    game.run()
+    score = game.run()
+    print(score)
 
     main_menu()
 

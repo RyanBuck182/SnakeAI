@@ -17,6 +17,7 @@ class GameHandler:
         self.player = Player(player_start_pos, player_start_length)
         self.fruit = Fruit()
         self.randomize_fruit_position()
+        self.score = 0
         self.game_over = False
 
     def update_game(self, player_input: Input):
@@ -29,6 +30,7 @@ class GameHandler:
         if self.is_player_colliding():
             self.game_over = True
         elif self.is_player_eating_fruit():
+            self.score += 1
             self.player.add_segment()
             self.randomize_fruit_position()
 
