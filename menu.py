@@ -1,5 +1,6 @@
 from menu_element import MenuElement
 from selectable_menu_element import SelectableMenuElement
+from optioned_menu_element import OptionedMenuElement
 
 
 class Menu:
@@ -32,3 +33,11 @@ class Menu:
 
     def selection_down(self):
         self.selection = min(self.selection + 1, len(self.selectable_elements) - 1)
+
+    def selection_left(self):
+        if isinstance(self.selectable_elements[self.selection], OptionedMenuElement):
+            self.selectable_elements[self.selection].left()
+
+    def selection_right(self):
+        if isinstance(self.selectable_elements[self.selection], OptionedMenuElement):
+            self.selectable_elements[self.selection].right()
