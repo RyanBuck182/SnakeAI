@@ -41,3 +41,6 @@ class Menu:
     def selection_right(self):
         if isinstance(self.selectable_elements[self.selection], OptionedMenuElement):
             self.selectable_elements[self.selection].right()
+
+    def draw(self):
+        pass
