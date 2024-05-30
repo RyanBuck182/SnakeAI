@@ -1,6 +1,6 @@
 import pygame
 from coordinate import Coordinate
-from game import Game
+from rendered_game import RenderedGame
 from game_handler import GameHandler
 from pygame_game_renderer import PygameGameRenderer
 from pygame_game_controller import PygameGameController
@@ -48,7 +48,7 @@ def play_manual():
 
     controller = PygameGameController()
 
-    game = Game(handler, renderer, controller)
+    game = RenderedGame(handler, controller, renderer)
     game.run()
 
     main_menu()
