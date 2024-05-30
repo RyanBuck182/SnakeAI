@@ -12,18 +12,15 @@ class PygameGameRenderer(GameRenderer):
     DEFAULT_FRUIT_COLOR = (255, 0, 0)
 
     def __init__(self,
-                 screen_dimensions: Coordinate,
+                 screen: pygame.Surface | pygame.SurfaceType,
                  background_color: tuple[int, int, int] = DEFAULT_BACKGROUND_COLOR,
                  player_color: tuple[int, int, int] = DEFAULT_PLAYER_COLOR,
                  fruit_color: tuple[int, int, int] = DEFAULT_FRUIT_COLOR):
-        self.screen_dimensions = screen_dimensions
+        self.screen = screen
+        self.screen_dimensions = Coordinate(*screen.get_size())
         self.background_color = background_color
         self.player_color = player_color
         self.fruit_color = fruit_color
-
-        pygame.init()
-        pygame.display.set_caption("Snake")
-        self.screen = pygame.display.set_mode(tuple(screen_dimensions))
 
     def draw_game(self, game_handler: GameHandler, move_progress: float):
         square_dimensions = self.screen_dimensions // game_handler.grid_dimensions
