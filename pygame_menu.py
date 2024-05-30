@@ -1,5 +1,4 @@
 from math import ceil, floor
-from typing import Callable
 import pygame
 import pygame.freetype
 from coordinate import Coordinate
@@ -10,7 +9,7 @@ class PygameMenu(Menu):
     MAX_TEXT_SIZE = 70
     SELECTION_COLOR = (0, 255, 0)
     TEXT_COLOR = (255, 255, 255)
-    SELECTION_INDICATOR_SIZE = 0.3
+    SELECTION_INDICATOR_SIZE = 0.05
     TOP_MARGIN = 0.05
     BOTTOM_MARGIN = 0.05
     LEFT_MARGIN = 0.15
@@ -48,23 +47,24 @@ class PygameMenu(Menu):
 
         allocated_width = self.screen_dimensions.x - left_start
         allocated_height = bottom_end - top_start
-        height_per_option = floor(allocated_height / len(self.option_funcs))
 
-        for i in range(len(self.option_names)):
+        for i in range(len(self.elements)):
+            option_height = floor(allocated_height * self.elements[i].height_percent)
+
             if i == self.selection:
-                side_length = min(left_start * self.SELECTION_INDICATOR_SIZE, height_per_option * self.SELECTION_INDICATOR_SIZE)
+                side_length = allocated_height * self.SELECTION_INDICATOR_SIZE
                 pygame.draw.rect(self.screen,
                                  self.SELECTION_COLOR,
                                  pygame.Rect(
                                      floor((left_start - side_length) / 2),
-                                     floor(top_start + (height_per_option - side_length) / 2),
+                                     floor(top_start + (option_height - side_length) / 2),
                                      floor(side_length),
                                      floor(side_length)
                                  ))
 
-            self.draw_text(self.option_names[i],
+            self.draw_text(self.elements[i].text,
                            Coordinate(left_start, top_start),
-                           Coordinate(allocated_width, height_per_option))
-            top_start += height_per_option
+                           Coordinate(allocated_width, option_height))
+            top_start += option_height
 
         pygame.display.update()

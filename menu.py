@@ -1,26 +1,34 @@
-from typing import Callable
+from menu_element import MenuElement
+from selectable_menu_element import SelectableMenuElement
 
 
 class Menu:
     def __init__(self):
-        self.option_names = []
-        self.option_funcs = []
+        self.elements = []
+        self.selectable_elements = []
         self.selection = 0
 
-    def add_option(self, name: str, func: Callable):
-        self.option_names.append(name)
-        self.option_funcs.append(func)
+    def add_element(self, element: MenuElement):
+        total_height_percent = 0
+        for v in self.elements:
+            total_height_percent += v.height_percent if v.height_percent is not None else 0
+        if total_height_percent + (element.height_percent if element.height_percent is not None else 0) > 1:
+            raise "Total height percent of elements can not be above 1"
+
+        self.elements.append(element)
+        if isinstance(element, SelectableMenuElement):
+            self.selectable_elements.append(element)
 
     def select_current(self):
-        self.select_option(self.selection)
+        self.select_element(self.selection)
 
-    def select_option(self, selection: int):
-        if len(self.option_funcs) < selection + 1:
+    def select_element(self, selection: int):
+        if len(self.selectable_elements) < selection + 1:
             raise "ERROR: Cannot select option that does not exist"
-        self.option_funcs[selection]()
+        self.selectable_elements[selection].select()
 
     def selection_up(self):
         self.selection = max(self.selection - 1, 0)
 
     def selection_down(self):
-        self.selection = min(self.selection + 1, len(self.option_funcs) - 1)
+        self.selection = min(self.selection + 1, len(self.selectable_elements) - 1)

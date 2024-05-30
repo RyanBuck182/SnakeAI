@@ -5,6 +5,8 @@ from game_handler import GameHandler
 from pygame_game_renderer import PygameGameRenderer
 from pygame_game_controller import PygameGameController
 from pygame_menu import PygameMenu
+from menu_element import MenuElement
+from selectable_menu_element import SelectableMenuElement
 
 SCREEN_DIMENSIONS = Coordinate(640, 640)
 
@@ -15,9 +17,9 @@ SCREEN = pygame.display.set_mode(tuple(SCREEN_DIMENSIONS))
 
 def main_menu():
     menu = PygameMenu(SCREEN)
-    menu.add_option("Play Snake", play_manual)
-    menu.add_option("Train AI", None)
-    menu.add_option("Quit", pygame.quit)
+    menu.add_element(SelectableMenuElement("Play Snake", 1/3, on_select=play_manual))
+    menu.add_element(SelectableMenuElement("Train AI", 1/3, on_select=lambda: None))
+    menu.add_element(SelectableMenuElement("Quit", 1/3, on_select=pygame.quit))
 
     selection = None
     while selection is None:
@@ -35,7 +37,7 @@ def main_menu():
                     case pygame.K_RETURN:
                         selection = menu.selection
 
-    menu.select_option(selection)
+    menu.select_element(selection)
 
 
 def play_manual():
