@@ -48,8 +48,20 @@ class PygameMenu(Menu):
         allocated_width = self.screen_dimensions.x - left_start
         allocated_height = bottom_end - top_start
 
+        locked_height_percent = 0
+        unlocked_element_count = 0
+        for element in self.elements:
+            if element.height_percent is None:
+                unlocked_element_count += 1
+            else:
+                locked_height_percent += element.height_percent
+
+        unlocked_element_height_percent = (1 - locked_height_percent) / max(1, unlocked_element_count)
+
         for i in range(len(self.elements)):
-            option_height = floor(allocated_height * self.elements[i].height_percent)
+            option_height = floor(allocated_height * unlocked_element_height_percent)
+            if self.elements[i].height_percent is not None:
+                option_height = floor(allocated_height * self.elements[i].height_percent)
 
             if i == self.selection:
                 side_length = allocated_height * self.SELECTION_INDICATOR_SIZE
