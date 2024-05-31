@@ -1,3 +1,4 @@
+from typing import Optional, Callable
 from menu_element import MenuElement
 from selectable_menu_element import SelectableMenuElement
 from optioned_menu_element import OptionedMenuElement
@@ -20,13 +21,13 @@ class Menu:
         if isinstance(element, SelectableMenuElement):
             self.selectable_elements.append(element)
 
-    def select_current(self):
-        self.select_element(self.selection)
+    def select_current(self) -> Optional[Callable]:
+        return self.select_element(self.selection)
 
-    def select_element(self, selection: int):
+    def select_element(self, selection: int) -> Optional[Callable]:
         if len(self.selectable_elements) < selection + 1:
             raise "ERROR: Cannot select option that does not exist"
-        self.selectable_elements[selection].select()
+        return self.selectable_elements[selection].select()
 
     def selection_up(self):
         self.selection = max(self.selection - 1, 0)
@@ -42,5 +43,5 @@ class Menu:
         if isinstance(self.selectable_elements[self.selection], OptionedMenuElement):
             self.selectable_elements[self.selection].right()
 
-    def draw(self):
+    def load(self) -> Optional[Callable]:
         pass

@@ -1,4 +1,5 @@
 from math import ceil, floor
+from typing import Optional, Callable
 import pygame
 import pygame.freetype
 from coordinate import Coordinate
@@ -13,6 +14,7 @@ class PygameMenu(Menu):
     TOP_MARGIN = 0.05
     BOTTOM_MARGIN = 0.05
     LEFT_MARGIN = 0.15
+    BACKGROUND_COLOR = (0, 0, 0)
 
     def __init__(self, screen: pygame.Surface | pygame.SurfaceType):
         super().__init__()
@@ -41,6 +43,8 @@ class PygameMenu(Menu):
                        self.TEXT_COLOR)
 
     def draw(self):
+        self.screen.fill(self.BACKGROUND_COLOR)
+
         left_start = ceil(self.screen_dimensions.x * self.LEFT_MARGIN)
         top_start = ceil(self.screen_dimensions.y * self.TOP_MARGIN)
         bottom_end = floor(self.screen_dimensions.y * (1 - self.BOTTOM_MARGIN))
@@ -80,3 +84,28 @@ class PygameMenu(Menu):
             top_start += option_height
 
         pygame.display.update()
+
+    def load(self) -> Optional[Callable]:
+        next_ui = None
+        selection_complete = False
+        while not selection_complete:
+            self.draw()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    next_ui = None
+                    selection_complete = True
+                elif event.type == pygame.KEYDOWN:
+                    match event.key:
+                        case pygame.K_w | pygame.K_UP:
+                            self.selection_up()
+                        case pygame.K_s | pygame.K_DOWN:
+                            self.selection_down()
+                        case pygame.K_d | pygame.K_RIGHT:
+                            self.selection_right()
+                        case pygame.K_a | pygame.K_LEFT:
+                            self.selection_left()
+                        case pygame.K_RETURN:
+                            next_ui = self.select_current()
+                            if next_ui is not None:
+                                selection_complete = True
+        return next_ui
