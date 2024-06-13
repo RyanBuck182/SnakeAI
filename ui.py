@@ -27,6 +27,14 @@ GRID_DIMENSION_OPTIONS = [
     MenuElementOption('96x96', Coordinate(96, 96)),
     MenuElementOption('128x128', Coordinate(128, 128))
 ]
+SNAKE_SPEED_OPTIONS = [
+    MenuElementOption('Very Slow', 0.3),
+    MenuElementOption('Slow', 0.25),
+    MenuElementOption('Normal', 0.2),
+    MenuElementOption('Fast', 0.15),
+    MenuElementOption('Very Fast', 0.1),
+    MenuElementOption('Mach 1', 0.05)
+]
 
 DEFAULT_SCREEN_DIMENSION_INDEX = 2
 current_screen_dimension_index = DEFAULT_SCREEN_DIMENSION_INDEX
@@ -60,17 +68,20 @@ def pre_game_menu() -> Callable:
     menu = PygameMenu(screen)
 
     grid_size = OptionedMenuElement("Grid Size", GRID_DIMENSION_OPTIONS, on_select=menu.selection_down)
-    play = SelectableMenuElement("Play", on_select=lambda: lambda: play_manual(grid_size.get_selected_value()))
+    speed = OptionedMenuElement("Snake Speed", SNAKE_SPEED_OPTIONS, on_select=menu.selection_down)
+    play = SelectableMenuElement("Play", on_select=lambda: lambda: play_manual(grid_size.get_selected_value(),
+                                                                               speed.get_selected_value()))
     back = SelectableMenuElement("Back", on_select=lambda: main_menu)
 
     menu.add_element(grid_size)
+    menu.add_element(speed)
     menu.add_element(play)
     menu.add_element(back)
 
     return menu.load()
 
 
-def play_manual(grid_dimensions: Coordinate) -> Callable:
+def play_manual(grid_dimensions: Coordinate, speed: float) -> Callable:
     player_start_pos = Coordinate(0, 0)
     player_start_length = 4
     handler = GameHandler(grid_dimensions, player_start_pos, player_start_length)
@@ -80,7 +91,7 @@ def play_manual(grid_dimensions: Coordinate) -> Callable:
 
     controller = PygameGameController()
 
-    game = RenderedGame(handler, controller, renderer)
+    game = RenderedGame(handler, controller, renderer, speed)
     score = game.run()
     print(score)
 
